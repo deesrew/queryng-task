@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block navbar %}
+    {{ include('main/_navbar.html.twig') }}
+{% endblock %}
+
+{% block container %}
+
+    <div class="h1">Generate massages</div>
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <div class="h2">Form</div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="mb-3">
+                <label class="form-label">{{ form_label(form.massagesNumber) }}</label>
+                {{ form_widget(form.massagesNumber, {'attr': {'class': 'form-control'}}) }}
+                <div id="emailHelp" class="form-text">
+                    {{ form_errors(form.massagesNumber) }}
+                    {{ form_help(form.massagesNumber) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form_label(form.wordsNumber) }}</label>
+                {{ form_widget(form.wordsNumber, {'attr': {'class': 'form-control'}}) }}
+                <div id="emailHelp" class="form-text">
+                    the number of words from vocabulary
+                    {{ form_errors(form.wordsNumber) }}
+                    {{ form_help(form.wordsNumber) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+        <div class="col-sm-4">
+            <div class="h2">Info</div>
+            <div class="fs-3">
+                Очередь выбирается поочереди
+            </div>
+            <div class="fs-1">
+                {% if info %}
+                    {{ info }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

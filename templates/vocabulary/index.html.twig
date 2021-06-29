@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vocabulary index{% endblock %}
+
+{% block navbar %}
+    {{ include('main/_navbar.html.twig') }}
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="h1">Vocabulary</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="h2">Words</div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Word</th>
+                    <th scope="col">actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for vocabulary in paginator.results %}
+                    <tr>
+                        <td scope="row">{{ vocabulary.id }}</td>
+                        <td>{{ vocabulary.word }}</td>
+                        <td>
+                            <a class="btn btn-secondary" href="{{ path('vocabulary_show', {'id': vocabulary.id}) }}">show</a>
+                            <a class="btn btn-secondary" href="{{ path('vocabulary_edit', {'id': vocabulary.id}) }}">edit</a>
+                            <a class="btn btn-secondary" href="{{ path('vocabulary_delete', {'id': vocabulary.id}) }}">delete</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if paginator.hasToPaginate %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if paginator.hasPreviousPage %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('vocabulary_index_paginated', {page: 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">first</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('vocabulary_index_paginated', {page: paginator.previousPage}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">previous</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                        <span class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">previous</span>
+                        </span>
+                            </li>
+                        {% endif %}
+                        {% for i in 1..paginator.lastPage %}
+                            {% if i == paginator.currentPage %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">{{ i }}</a>
+                                </li>
+                            {% else %}
+                                {% if ((paginator.currentPage - i < 6) and (i - paginator.currentPage < 6)) %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ path('vocabulary_index_paginated', {page: i}) }}">
+                                            {{ i }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if paginator.hasNextPage %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('vocabulary_index_paginated', {page: paginator.nextPage}) }}" aria-label="Next">
+                                    <span aria-hidden="true">next</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('vocabulary_index_paginated', {page: paginator.lastPage}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">last</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item" aria-label="Next">
+                        <span class="page-link" aria-label="Next">
+                            <span aria-hidden="true">next</span>
+                        </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+            <a class="btn btn-lg btn-primary" href="{{ path('vocabulary_generate') }}" role="button">Generate</a>
+            <a class="btn btn-lg btn-primary" href="{{ path('vocabulary_new') }}" role="button">Create new</a>
+            <a class="btn btn-lg btn-primary" href="{{ path('vocabulary_clear') }}" role="button">Clear all</a>
+
+        </div>
+        <div class="col-sm-3">
+            <div class="h2">Info</div>
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td colspan="3">Records number</td>
+                        <td colspan="3">{{ info.count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

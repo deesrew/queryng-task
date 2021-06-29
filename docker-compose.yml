@@ -1,0 +1,87 @@
+version: "3.3"
+services:
+  mysql:
+    image: mysql:5.7
+    hostname: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - "3306:3306"
+  rabbit:
+    image: rabbitmq
+    hostname: rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: userpass
+    volumes:
+      - "./:/app"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  php-fpm:
+    image: webdevops/php-dev:7.4
+    hostname: php-fpm
+    volumes:
+      - "./:/app"
+    working_dir: "/app"
+    depends_on:
+      - mysql
+  nginx:
+    image: webdevops/nginx
+    hostname: nginx
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+      WEB_DOCUMENT_INDEX: index.php
+      WEB_PHP_SOCKET: php-fpm:9000
+    ports:
+      - "80:80"
+    volumes:
+      - "./:/app"
+    depends_on:
+      - php-fpm
+  memcached:
+    image: memcached:1.6.8
+    hostname: memcached
+    environment:
+      MEMCACHED_USERNAME: my_user
+      MEMCACHED_PASSWORD: my_password
+    ports:
+      - '11211:11211'
+  elk:
+    image: sebp/elk
+    hostname: elk
+    container_name: elk
+    environment:
+      - ES_CONNECT_RETRY=500
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+#  sphinx:
+#    image: duzun/sphinx:2.2
+#    container_name: sphinx
+#    restart: always
+#    depends_on:
+#      - mysql
+#    ports:
+#      - "9312:9312"
+#      - "9306:9306"
+#    volumes:
+#      # expose sphinx daemon to system through socket
+#      - /run/sphinx/:/run/sphinx/
+#      # make MySQL accessible to sphinx through socket
+#      - /run/mysqld/:/run/mysqld/
+#      # expose logs to host system
+#      - /var/log/sphinxsearch:/var/lib/sphinx/log
+#      # choose a location for index data
+#      # - /var/lib/sphinx/data:/var/lib/sphinx/data
+
+#  composer:
+#    restart: "no"
+#    image: composer:2.0.14
+#    command: install --ignore-platform-regs
+#    working_dir: /app
+#    volumes:
+#      - "./:/app"

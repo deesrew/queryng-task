@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block navbar %}
+    {{ include('main/_navbar.html.twig') }}
+{% endblock %}
+
+{% block container %}
+    <h1>Task</h1>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="h2">Queues</div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Field1</th>
+                    <th scope="col">Field2</th>
+                    <th scope="col">Date_created</th>
+                    <th scope="col">actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in paginator.results %}
+                    <tr>
+                        <td scope="row">{{ task.id }}</td>
+                        <td>{{ task.field1 }}</td>
+                        <td>{{ task.field2 }}</td>
+                        <td>{{ task.dateCreated ? task.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <a class="btn btn-secondary mb-2" href="{{ path('task_show', {'id': task.id}) }}">show</a>
+                            <a class="btn btn-secondary mb-2" href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+                            <a class="btn btn-secondary mb-2" href="{{ path('task_delete', {'id': task.id}) }}">delete</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if paginator.hasToPaginate %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if paginator.hasPreviousPage %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('task_index_paginated', {page: 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">first</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('task_index_paginated', {page: paginator.previousPage}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">previous</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                        <span class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">previous</span>
+                        </span>
+                            </li>
+                        {% endif %}
+                        {% for i in 1..paginator.lastPage %}
+                            {% if i == paginator.currentPage %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">{{ i }}</a>
+                                </li>
+                            {% else %}
+                                {% if ((paginator.currentPage - i < 6) and (i - paginator.currentPage < 6)) %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ path('task_index_paginated', {page: i}) }}">
+                                            {{ i }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if paginator.hasNextPage %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('task_index_paginated', {page: paginator.nextPage}) }}" aria-label="Next">
+                                    <span aria-hidden="true">next</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path('task_index_paginated', {page: paginator.lastPage}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">last</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item" aria-label="Next">
+                        <span class="page-link" aria-label="Next">
+                            <span aria-hidden="true">next</span>
+                        </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+            <a class="btn btn-lg btn-primary" href="{{ path('task_new') }}" role="button">Create new</a>
+            <a class="btn btn-lg btn-primary" href="{{ path('task_clear') }}" role="button">Clear all</a>
+            <a class="btn btn-lg btn-primary" href="{{ path('task_send_one') }}" role="button">Send in rabbit queue</a>
+            <a class="btn btn-lg btn-primary" href="{{ path('task_generate') }}" role="button">Generate massages</a>
+
+        </div>
+        <div class="col-sm-3">
+            <div class="h2">Info</div>
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <td colspan="3">Records number</td>
+                    <td colspan="3">{{ info.count }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Main page{% endblock %}
+
+{% block navbar %}
+    {{ include('main/_navbar.html.twig') }}
+{% endblock %}
+
+{% block container %}
+
+    <div class="h1">Search massages</div>
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <div class="h2">Form</div>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="mb-3">
+                <label class="form-label">{{ form_label(form.search_in_db) }}</label>
+                {{ form_widget(form.search_in_db, {'attr': {'class': 'form-control'}}) }}
+                <div id="emailHelp" class="form-text">
+                    {{ form_errors(form.search_in_db) }}
+                    {{ form_help(form.search_in_db) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form_label(form.search_in_el) }}</label>
+                {{ form_widget(form.search_in_el, {'attr': {'class': 'form-control'}}) }}
+                <div id="emailHelp" class="form-text">
+                    {{ form_errors(form.search_in_el) }}
+                    {{ form_help(form.search_in_el) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form_label(form.search_in_sphinx) }}</label>
+                {{ form_widget(form.search_in_sphinx, {'attr': {'class': 'form-control'}}) }}
+                <div id="emailHelp" class="form-text">
+                    {{ form_errors(form.search_in_sphinx) }}
+                    {{ form_help(form.search_in_sphinx) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            </div>
+
+            {{ form_end(form) }}
+
+            <div class="mt-5">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Field1</th>
+                        <th scope="col">Field2</th>
+                        <th scope="col">Date_created</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in last %}
+                        <tr>
+                            <td scope="row">{{ task.id }}</td>
+                            <td>{{ task.field1 }}</td>
+                            <td>{{ task.field2 }}</td>
+                            <td>{{ task.dateCreated['date'] ? task.dateCreated['date'] : task.dateCreated|date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="h2">Info</div>
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <td colspan="3">Время выполнения запроса</td>
+                    <td colspan="3">{{ duration }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Кеширование</td>
+                    <td colspan="3">{{ cached }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}
