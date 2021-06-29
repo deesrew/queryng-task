@@ -38,7 +38,7 @@ class TaskRepository extends ServiceEntityRepository
 
         $em = $this->getEntityManager();
 
-        $sql = "INSERT INTO task (field1, field2, date_created) VALUES ('{$arr['field1']}', '{$arr['field1']}', '{$dateFormatted}')";
+        $sql = "INSERT INTO task (field1, field2, date_created) VALUES ('{$arr['field1']}', '{$arr['field2']}', '{$dateFormatted}')";
         $stmt = $em->getConnection()->prepare($sql);
         $result = $stmt->execute();
     }

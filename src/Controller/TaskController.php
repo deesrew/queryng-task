@@ -170,8 +170,8 @@ class TaskController extends AbstractController
                 $filed2 = "";
 
                 for ($i = 0; $i < Task::wordsInField; ++$i) {
-                    $filed1 .= $wordArr[rand(0, $counter - 1)] . ' ';
-                    $filed2 .= $wordArr[rand(0, $counter - 1)] . ' ';
+                    $filed1 .= $wordArr[mt_rand(0, $counter - 1)] . ' ';
+                    $filed2 .= $wordArr[mt_rand(0, $counter - 1)] . ' ';
                 }
 
                 $taskRow = array(
