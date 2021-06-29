@@ -46,12 +46,12 @@ class ElasticSearchService
     public function getData()
     {
         $result = $this->client->get($this->params);
-        return $result['_source']["items"];
+        return $result['_source'][ElasticSearchService::ITEMS_CONTAINER_NAME];
     }
 
     public function indexDate($data)
     {
-        $this->params['body'] = ["items" => $data];
+        $this->params['body'] = [ElasticSearchService::ITEMS_CONTAINER_NAME => $data];
         $this->params['type'] = strtolower($this->searchString);
         $this->client->index($this->params);
     }
@@ -66,7 +66,7 @@ class ElasticSearchService
                 'id' => $item->getId(),
                 'field1' => $item->getField1(),
                 'field2' => $item->getField2(),
-                'dateCreated' => $item->getDateCreated(),
+                'dateCreated' => date_format($item->getDateCreated(), 'Y-m-d H:i:s'),
             ];
         }
 

@@ -67,7 +67,7 @@
                             <td scope="row">{{ task.id }}</td>
                             <td>{{ task.field1 }}</td>
                             <td>{{ task.field2 }}</td>
-                            <td>{{ task.dateCreated['date'] ? task.dateCreated['date'] : task.dateCreated|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ task.dateCreated ? task.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
                     {% else %}
                         <tr>
