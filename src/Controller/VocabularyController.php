@@ -75,7 +75,7 @@ class VocabularyController extends AbstractController
 
                 foreach ($words as $i => $item) {
                     $product = new Vocabulary();
-                    $product->setWord($item['word']);
+                    $product->setWord(preg_replace('/\PL/u', '', $item['word']));
                     $em->persist($product);
 
                     // flush everything to the database every 20 inserts
