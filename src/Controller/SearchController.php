@@ -117,7 +117,7 @@ class SearchController extends AbstractController
                             ->getItemsFromDB($searchString, $taskRepository)
                     );
 
-                $elasticSearch->indexDate($items);
+                $elasticSearch->indexData($items);
             }
 
             $cache->saveCache($items);

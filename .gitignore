@@ -20,3 +20,5 @@
 
 .idea
 ###< phpunit/phpunit ###
+
+*.log

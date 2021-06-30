@@ -49,7 +49,7 @@ class ElasticSearchService
         return $result['_source'][ElasticSearchService::ITEMS_CONTAINER_NAME];
     }
 
-    public function indexDate($data)
+    public function indexData($data)
     {
         $this->params['body'] = [ElasticSearchService::ITEMS_CONTAINER_NAME => $data];
         $this->params['type'] = strtolower($this->searchString);

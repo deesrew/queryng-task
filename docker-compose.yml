@@ -10,17 +10,18 @@ services:
       MYSQL_PASSWORD: ${DB_PASS}
     ports:
       - "3306:3306"
-  rabbit:
-    image: rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.6-management
     hostname: rabbit
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: userpass
     volumes:
-      - "./:/app"
+      - "./docker/rabbitmq/etc/:/app"
+      - "./docker/rabbitmq/logs/:/app"
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 15672:15672
+      - 5672:5672
   php-fpm:
     image: webdevops/php-dev:7.4
     hostname: php-fpm

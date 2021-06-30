@@ -7,7 +7,7 @@ MAINTAINER PHPtoday.ru <info@phptoday.ru>
 # В данном случае мы установим некоторые зависимости и модули PHP.
 # Для установки модулей используем команду docker-php-ext-install.
 # На каждый RUN создается новый слой в образе, поэтому рекомендуется объединять команды.
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y -q \
         curl \
         wget \
         git \
