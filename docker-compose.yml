@@ -60,25 +60,17 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-#  sphinx:
-#    image: duzun/sphinx:2.2
-#    container_name: sphinx
-#    restart: always
-#    depends_on:
-#      - mysql
-#    ports:
-#      - "9312:9312"
-#      - "9306:9306"
-#    volumes:
-#      # expose sphinx daemon to system through socket
-#      - /run/sphinx/:/run/sphinx/
-#      # make MySQL accessible to sphinx through socket
-#      - /run/mysqld/:/run/mysqld/
-#      # expose logs to host system
-#      - /var/log/sphinxsearch:/var/lib/sphinx/log
-#      # choose a location for index data
-#      # - /var/lib/sphinx/data:/var/lib/sphinx/data
-
+  sphinx:
+    image: duzun/sphinx:2.2
+    hostname: sphinx
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "9312:9312"
+      - "9306:9306"
+    volumes:
+      - "./:/app"
 #  composer:
 #    restart: "no"
 #    image: composer:2.0.14

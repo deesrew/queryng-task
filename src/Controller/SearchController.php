@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Foolz\SphinxQL\Drivers\Mysqli\Connection;
+use Foolz\SphinxQL\SphinxQL;
+
 
 class SearchController extends AbstractController
 {
@@ -19,6 +22,8 @@ class SearchController extends AbstractController
     const SEARCH_ELK_PREFIX = 'EL_DB_';
 
     public $isCached = '';
+    public $tasks = [];
+
 
     /**
      * @Route("/search", name="search_index")
@@ -36,10 +41,7 @@ class SearchController extends AbstractController
 
         $form->handleRequest($request);
 
-        $tasks = [];
-
         $duration = false;
-        $cached = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -48,7 +50,7 @@ class SearchController extends AbstractController
             if (strlen($data['search_in_db']) > 2) {
 
                 $start = explode(' ', microtime())[0];
-                $tasks = $this->getItemsFromDB($data['search_in_db'], $taskRepository);
+                $this->tasks = $this->getItemsFromDB($data['search_in_db'], $taskRepository);
                 $end = explode(' ', microtime())[0];
 
                 $duration = $end - $start;
@@ -57,17 +59,37 @@ class SearchController extends AbstractController
             if (strlen($data['search_in_el']) > 2) {
 
                 $start = explode(' ', microtime())[0];
-                $tasks = $this->getItemsFromElasticSearch($data['search_in_el'], $taskRepository);
+                $this->tasks = $this->getItemsFromElasticSearch($data['search_in_el'], $taskRepository);
                 $end = explode(' ', microtime())[0];
 
                 $duration = $end - $start;
+            }
+
+            if (strlen($data['search_in_sphinx']) > 2) {
+
+                var_dump($data['search_in_sphinx']);
+
+                // create a SphinxQL Connection object to use with SphinxQL
+                $conn = new Connection();
+
+                $conn->setParams(array('host' => 'sphinx', 'port' => 9312));
+
+                $query = (new SphinxQL($conn))->select('field1')
+                    ->from('task')
+                    ->where('filed1', 'LIKE', '%' . $data['search_in_sphinx'] . '%');
+
+                $result = $query->getResult();
+
+
+                var_dump($result);
+
             }
 
         }
 
         return $this->render('search/index.html.twig', [
             'form' => $form->createView(),
-            'last' => $tasks,
+            'last' => $this->tasks,
             'duration' => $duration,
             'cached' => $this->isCached
         ]);
