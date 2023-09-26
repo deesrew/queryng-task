@@ -115,7 +115,7 @@ class TaskController extends AbstractController
             return $this->render('task/send_in_queue.html.twig', [
                 'task' => $task,
                 'form' => $form->createView(),
-                'info' => "Sent in ${queueName}!"
+                'info' => "Sent in $queueName!"
             ]);
         }
 
